@@ -164,7 +164,7 @@ The register values can be examined to understand how instructions execute and h
 **Observation:** The C program produced the same output (15) using native GCC and the RISC-V toolchain.
 ### Experiment 01 – Sum of First N Integers
 
-![Sum of first N integers execution](screenshots/01_sum1ton_execution.png)
+![Sum of first N integers execution](screenshots/01_sum1ton.png)
 
 The screenshot shows:
 - C program execution using GCC.
