@@ -10,7 +10,7 @@ The application program communicates with hardware through different software an
 
 ### Interface Flow
 
-![RISC-V instruction formats](screenshots/01_Application_to_hardware_flow)
+![RISC-V instruction formats](screenshots/01_Application_to_hardware_flow.png)
 
 
 ### Interfaces
@@ -348,40 +348,7 @@ In this experiment, a RISC-V CPU is implemented using Verilog.
 Instead of directly executing a C program, the program is first converted into machine instructions. These instructions are represented in hexadecimal format and stored in the instruction memory of the processor.
 
 ### Execution Flow
-
-```text
-       C Program
-       sum1ton.c
-           |
-           v
-    RISC-V Compiler
-           |
-           v
-    Machine Instructions
-           |
-           v
-      Hex File (.hex)
-           |
-           v
-   Instruction Memory
-           |
-           v
-    RISC-V CPU (Verilog)
-           |
-           v
-    Instruction Decode
-           |
-           v
-     Instruction Execute
-           |
-           v
-      Data Memory
-           |
-           v
-         Output
-    Sum from 1 to N
-```
-
+![RISC-V CPU Execution Flow](screenshots/05_riscv_cpu_execution_flow.png)
 ### Working
 
 1. Write the C program to calculate the sum of integers from 1 to N.
