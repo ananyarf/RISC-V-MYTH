@@ -138,13 +138,13 @@ The disassembly displays the machine instructions along with their corresponding
 Run the program using the Spike RISC-V ISA simulator:
 
 ```bash
-spike pk sum1ton_O1.elf
+spike pk sum1ton_O1.o
 ```
 
 To execute in debug mode:
 
 ```bash
-spike -d pk sum1ton_O1.elf
+spike -d pk sum1ton_O1.o
 ```
 
 ### Step 5: Debug and observe register values
