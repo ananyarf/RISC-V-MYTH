@@ -1,49 +1,51 @@
-# Day 3 – Digital Logic Design Using TL-Verilog
+# Day 03 – Digital Logic Design Using TL-Verilog
 
-## Building a RISC-V CPU Core – MYTH Workshop
-
-**Instructor:** Steve Hoover, Founder of Redwood EDA  
-**Platform:** Makerchip Online IDE  
-**Language:** Transaction-Level Verilog (TL-Verilog)
-
-### 1. Introduction
-
-Day 3 of the RISC-V MYTH workshop focuses on digital logic design using TL-Verilog.
-
-The objective of this workshop is to understand the methodology and tools required to design a RISC-V CPU core from scratch.
-
-The session introduces TL-Verilog, a transaction-level hardware description language, using the Makerchip online IDE.
-
-We begin with fundamental logic gates and gradually progress towards:
-
-- Combinational logic
-- Sequential logic
-- Pipelined logic
-- Pipeline stages and retiming
-- Validity and clock gating
-- Hierarchical design
-
-One of the important advantages of TL-Verilog is that it simplifies pipeline design by allowing us to describe operations at different stages without manually writing all the intermediate flip-flop connections.
+**Workshop:** RISC-V Based MYTH Workshop  
+**Instructor:** Steve Hoover – Founder, Redwood EDA  
+**Platform:** [Makerchip IDE](https://makerchip.com/)  
+**HDL:** Transaction-Level Verilog (TL-Verilog)
 
 ---
 
-## 2. Digital Logic – Fundamental Building Blocks
+## 1. Overview
 
-Logic gates are the fundamental building blocks of digital circuits. They operate on binary inputs (0 and 1) and produce binary outputs.
+Day 3 focuses on the fundamentals of digital logic design and the implementation of combinational, sequential, and pipelined circuits using Transaction-Level Verilog (TL-Verilog).
 
-### 2.1 Basic Logic Gates and Truth Tables
+The objective is to understand how individual logic gates can be combined to construct complex digital systems and how these concepts form the foundation of processor architecture.
 
-| Gate | Boolean expression | Description |
+The session introduces the Makerchip online IDE, where hardware designs can be written, compiled, simulated, and analyzed using waveform and automatically generated pipeline diagrams.
+
+The workshop progresses through the following concepts:
+
+- Fundamental logic gates and Boolean algebra
+- Combinational circuit design
+- Arithmetic circuits and multiplexers
+- Sequential logic and flip-flops
+- Pipeline stages and retiming
+- High-frequency design using pipelining
+- Validity-based pipeline control
+- Clock gating concepts
+- Hierarchical design and hardware replication
+
+## 2. Digital Logic Fundamentals
+
+Digital circuits operate on binary values, represented by logic 0 and logic 1. Logic gates are the fundamental building blocks used to construct these circuits.
+
+### 2.1 Logic Gates and Truth Tables
+
+The seven fundamental logic gates are AND, OR, NOT, NAND, NOR, XOR, and XNOR.
+
+| Gate | Boolean expression | Function |
 |---|---|---|
-| AND | Y = A · B | Output is 1 when both inputs are 1 |
-| OR | Y = A + B | Output is 1 when at least one input is 1 |
-| NOT | Y = A' | Inverts the input |
-| NAND | Y = (A · B)' | Inverted AND output |
-| NOR | Y = (A + B)' | Inverted OR output |
-| XOR | Y = A ⊕ B | Output is 1 when inputs differ |
-| XNOR | Y = (A ⊕ B)' | Output is 1 when inputs are equal |
+| AND | Y = A · B | Output is HIGH when both inputs are HIGH |
+| OR | Y = A + B | Output is HIGH when at least one input is HIGH |
+| NOT | Y = A' | Produces the complement of the input |
+| NAND | Y = (A · B)' | Complement of AND |
+| NOR | Y = (A + B)' | Complement of OR |
+| XOR | Y = A ⊕ B | Output is HIGH when inputs differ |
+| XNOR | Y = (A ⊕ B)' | Output is HIGH when inputs are equal |
 
-### Combined Truth Table
+**Combined truth table**
 
 | A | B | AND | OR | NAND | NOR | XOR | XNOR |
 |---|---|---|---|---|---|---|---|
@@ -52,7 +54,7 @@ Logic gates are the fundamental building blocks of digital circuits. They operat
 | 1 | 0 | 0 | 1 | 1 | 0 | 1 | 0 |
 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 1 |
 
-NOT gate:
+**NOT gate**
 
 | A | NOT A |
 |---|---|
@@ -61,50 +63,50 @@ NOT gate:
 
 ### 2.2 Boolean Operators and Verilog Notation
 
-The following table summarizes common Boolean operations and their corresponding Verilog operators.
+Boolean expressions can be represented in hardware description languages using logical and bitwise operators.
 
-| Operation | Boolean notation | Verilog operator |
-|---|---|---|
-| AND | A · B | `&` |
-| OR | A + B | `\|` |
-| NOT | A' | `~` |
-| XOR | A ⊕ B | `^` |
-| XNOR | (A ⊕ B)' | `~^` or `^~` |
-| Logical AND | – | `&&` |
-| Logical OR | – | `\|\|` |
-| Logical NOT | – | `!` |
-| Equality | – | `==` |
-| Ternary operation | – | `? :` |
+| Operation | Boolean notation | Verilog operator | Example |
+|---|---|---|---|
+| Bitwise AND | A · B | `&` | `A & B` |
+| Bitwise OR | A + B | `\|` | `A \| B` |
+| Bitwise NOT | A' | `~` | `~A` |
+| XOR | A ⊕ B | `^` | `A ^ B` |
+| XNOR | (A ⊕ B)' | `~^` | `A ~^ B` |
+| Logical AND | – | `&&` | `A && B` |
+| Logical OR | – | `\|\|` | `A \|\| B` |
+| Logical NOT | – | `!` | `!A` |
+| Equality | – | `==` | `A == B` |
+| Conditional selection | – | `?:` | `S ? A : B` |
 
-**Note:** Bitwise operators operate on individual bits, whereas logical operators evaluate an expression as a Boolean condition.
+**Bitwise vs. logical operations**
 
-### 2.3 Combinational Circuits
+- Bitwise operators perform operations on corresponding bits of vectors.
+- Logical operators evaluate expressions as Boolean conditions and return a single Boolean result.
 
-A combinational circuit is a digital circuit whose output depends only on its present inputs.
+These operators are essential for describing combinational and sequential hardware.
 
-It does not store previous values and does not require a clock.
+## 3. Combinational Circuit Design
 
-Examples:
-- Adders
-- Multiplexers
-- Encoders
-- Decoders
-- Comparators
+A combinational circuit is a digital circuit in which the output depends only on the current input values.
 
-#### Example 1: Full Adder
+It does not retain previous states and does not require a clock for its logical operation.
 
-A full adder is a combinational circuit that adds three binary inputs:
+Examples include adders, multiplexers, encoders, decoders, and comparators.
 
-- A – First input bit
-- B – Second input bit
+### 3.1 Full Adder
+
+A full adder is a combinational arithmetic circuit that adds three one-bit inputs:
+
+- A – First operand
+- B – Second operand
 - Cin – Carry input
 
 It produces two outputs:
 
-- Sum
+- Sum – Result bit
 - Cout – Carry output
 
-**Truth Table**
+**Truth table**
 
 | A | B | Cin | Sum | Cout |
 |---|---|---|---|---|
@@ -117,26 +119,26 @@ It produces two outputs:
 | 1 | 1 | 0 | 0 | 1 |
 | 1 | 1 | 1 | 1 | 1 |
 
-Boolean equations:
+**Boolean equations**
 
 ```verilog
 Sum  = A ^ B ^ Cin;
 Cout = (A & B) | (B & Cin) | (A & Cin);
 ```
 
-**Multiple-bit addition**
+**Multi-bit adder implementation**
 
-By connecting multiple full adders, we can construct a multi-bit ripple-carry adder.
+Multiple full adders can be cascaded to construct a multi-bit ripple-carry adder.
 
-The carry output of one full adder is connected to the carry input of the next full adder.
+The carry output of each stage is connected to the carry input of the next stage.
 
-For example, four full adders can be connected to construct a 4-bit adder.
+For example, four cascaded full adders form a 4-bit ripple-carry adder.
 
-This demonstrates how simple logic blocks can be combined to construct more complex digital circuits.
+This demonstrates how simple combinational building blocks can be interconnected to implement larger arithmetic operations.
 
-#### Example 2: Multiplexer (MUX)
+### 3.2 Multiplexer (MUX)
 
-A multiplexer is a combinational circuit that selects one of several input signals and forwards the selected input to the output.
+A multiplexer is a combinational circuit that selects one input from multiple input signals based on a select signal.
 
 For a 2:1 multiplexer:
 
@@ -144,76 +146,60 @@ For a 2:1 multiplexer:
 - Select: S
 - Output: F
 
-The output is determined by the select signal.
+**Truth table**
 
 | S | Output |
 |---|---|
 | 0 | X2 |
 | 1 | X1 |
 
-Boolean expression:
+**Boolean expression**
 
 ```verilog
 F = (S & X1) | (~S & X2);
 ```
 
-The same circuit can be implemented using:
+A 2:1 multiplexer can therefore be implemented using two AND gates, one NOT gate, and one OR gate.
 
-- Two AND gates
-- One NOT gate
-- One OR gate
-
-**TL-Verilog implementation:**
+**TL-Verilog implementation**
 
 ```tlv
 $out = $sel ? $in1 : $in2;
 ```
 
-Here:
-- When `$sel = 1`, `$in1` is selected.
-- When `$sel = 0`, `$in2` is selected.
+The ternary operator selects `$in1` when `$sel` is HIGH and `$in2` when `$sel` is LOW.
 
 Larger multiplexers can be constructed by combining smaller multiplexers.
 
-A nested ternary operator can also be used to implement priority-based selection.
-
-For one-hot selection, each select bit represents a separate input choice. Only one select bit should be active at a time.
+Selection can also be implemented using one-hot control signals, where only one select bit is active at a time, or using priority-based conditional expressions when multiple conditions may be active.
 
 ---
 
-## 3. Introduction to Makerchip IDE
+## 4. Makerchip IDE – Initial Setup
 
-Makerchip is an online platform used to write, compile and simulate TL-Verilog designs.
+Makerchip is an online hardware design and simulation platform used throughout the workshop.
 
-The workshop uses Makerchip to implement digital logic circuits without requiring a separate testbench for the basic examples.
+It provides an integrated environment for writing TL-Verilog, compiling designs, analyzing simulation waveforms, and viewing automatically generated pipeline diagrams.
 
-The platform provides:
+The initial exercise involved opening the Makerchip IDE, executing the provided Pythagoras example, and exploring the editor, waveform viewer, diagram, and compilation log.
 
-- TL-Verilog editor
-- Compilation
-- Simulation
-- Waveform viewer
-- NAV-TLV diagram
-- Log window
-- Visualization (VIZ) tab
+**Screenshot – Makerchip IDE**
 
-We first opened the Makerchip IDE, executed the given Pythagoras example and explored the different sections of the interface.
+![Makerchip Pythagoras Example](screenshots/01_makerchip_pyth.png)
 
-**Screenshot: `01_makerchip_pyth`**
-
-*Makerchip IDE showing the Pythagoras example, code editor, waveform, diagram and log output.*
+*Initial Makerchip environment with the Pythagoras example, source code, waveform, diagram, and compilation log.*
 
 ---
 
-## 4. Combinational Logic in Makerchip
+## 5. Combinational Logic Implementation in TL-Verilog
 
-### 4.1 Basic Combinational Logic – `02_comb_logic`
+### 5.1 Basic Logic Operations – 
 
-In Makerchip TL-Verilog, we do not need to explicitly declare input and output ports in the same way as traditional Verilog modules.
+TL-Verilog simplifies signal declaration and connectivity compared with conventional RTL coding.
 
-Signals can be directly defined using the `$` prefix.
+Signals are represented using the `$` prefix. In the Makerchip environment, the basic combinational examples can be implemented directly without explicitly declaring traditional module input and output ports.
 
-Examples:
+**Implementation**
 
 ```tlv
 $out = !$in1;               // NOT
@@ -222,47 +208,58 @@ $out = $in1 || $in2;        // Logical OR
 $out = $in1 ^ $in2;         // XOR
 ```
 
-The output is automatically calculated based on the input signals.
+These expressions demonstrate the implementation of basic Boolean operations using TL-Verilog.
 
-### 4.2 Vector Operations – `03_vectors`
+![Combinational Logic](screenshots/02_comb_logic.png)
 
-TL-Verilog supports operations on multi-bit signals called vectors.
+### 5.2 Vector Operations 
 
-Example:
+A vector is a collection of multiple bits treated as a single signal.
+
+TL-Verilog supports arithmetic and logical operations directly on vector signals.
+
+**Implementation**
 
 ```tlv
 $out[4:0] = $in1[3:0] + $in2[3:0];
 ```
 
-Here:
+**Signal interpretation**
 
-- `$in1[3:0]` is a 4-bit input.
-- `$in2[3:0]` is another 4-bit input.
-- `$out[4:0]` is a 5-bit output to accommodate the carry generated during addition.
+| Signal | Width | Description |
+|---|---:|---|
+| `$in1[3:0]` | 4 bits | First operand |
+| `$in2[3:0]` | 4 bits | Second operand |
+| `$out[4:0]` | 5 bits | Addition result |
 
-The output width is important because adding two 4-bit numbers can produce a 5-bit result.
+A 5-bit output is used to accommodate a possible carry generated while adding two 4-bit unsigned operands.
 
-In Makerchip, we specify the input widths because the platform generates the stimulus based on the declared signal widths.
+In Makerchip, signal widths are specified to define the stimulus and expected signal representation.
 
-After writing the code, press **E** to compile and execute the design.
+After writing the implementation, pressing **E** compiles and executes the design. The generated waveform can then be inspected without manually creating a separate testbench for these basic exercises.
 
-There is no need to manually write a testbench for these basic examples.
+![Vector Operations](screenshots/03_vectors.png)
 
-### 4.3 Multiplexer – `04_mux`
+### 5.3 Multiplexer Implementation 
 
-A 2:1 multiplexer can be implemented using the ternary operator.
+The 2:1 multiplexer discussed earlier is implemented in TL-Verilog using a conditional expression.
 
 ```tlv
 $out = $sel ? $in1 : $in2;
 ```
 
-The select signal determines which input is passed to the output.
+The expression implements input selection based on the value of `$sel`.
 
-This syntax makes multiplexer implementation simple and readable.
+- `$sel = 1`: Output receives `$in1`.
+- `$sel = 0`: Output receives `$in2`.
 
-### 4.4 Combinational Calculator – `05_comb_calc`
+This provides a compact representation of the multiplexer functionality.
 
-We implemented a calculator capable of performing four arithmetic operations:
+![Multiplexer](screenshots/04_mux.png)
+
+### 5.4 Combinational Calculator
+
+A combinational calculator was implemented to perform four arithmetic operations:
 
 1. Addition
 2. Subtraction
@@ -271,7 +268,7 @@ We implemented a calculator capable of performing four arithmetic operations:
 
 The operation is selected using a 2-bit opcode.
 
-**TL-Verilog code:**
+**TL-Verilog implementation**
 
 ```tlv
 |calc
@@ -294,97 +291,106 @@ The operation is selected using a 2-bit opcode.
                                           $qout;
 ```
 
-**Opcode selection**
+**Opcode mapping**
 
 | Opcode | Operation |
 |---|---|
-| 00 | Addition |
-| 01 | Subtraction |
-| 10 | Multiplication |
-| 11 | Division |
+| `2'b00` | Addition |
+| `2'b01` | Subtraction |
+| `2'b10` | Multiplication |
+| `2'b11` | Division |
 
-The ternary operator selects the corresponding arithmetic result.
+The arithmetic results are computed in parallel, and the opcode-controlled conditional expression selects the required result.
 
-A check is also included to avoid division by zero. In that case, the output is assigned the hexadecimal value `32'hDEAD_BEEF`.
+The division operation includes a zero-divisor check. If the divisor is zero, the output is assigned `32'hDEAD_BEEF` instead of performing the division.
 
-**Screenshot: `05_comb_calc`**
+**Observation:** This implementation demonstrates how arithmetic operators and conditional selection can be combined to construct a simple combinational datapath.
 
-*Combinational calculator implementation and simulation waveform.*
+![Combinational Calculator](screenshots/05_comb_calc.png)
 
 ---
 
-## 5. Sequential Logic
+## 6. Sequential Logic
 
-Unlike combinational logic, sequential logic depends on both present inputs and previous states.
+Sequential circuits differ from combinational circuits because their outputs depend on both current inputs and previously stored values.
 
-Sequential circuits use storage elements such as flip-flops.
+They use storage elements such as flip-flops to retain state between clock cycles.
 
-A clock signal controls when the stored values are updated.
+### 6.1 Clock and Flip-Flops
 
-### 5.1 Flip-Flops and Clock
+A flip-flop stores one bit of information and updates its state at a specified clock edge.
 
-A flip-flop stores a binary value and updates its output at a specified clock edge.
+In the examples discussed, the positive edge of the clock is used to capture and propagate new values.
 
-In the examples discussed, values propagate at the positive edge of the clock.
+The clock synchronizes the operations performed by different parts of the circuit.
 
-The clock provides synchronization between different operations.
+**Reset operation**
 
-Reset is used to initialize the circuit to a known state rather than allowing it to begin with an unknown or uninitialized value.
+A reset signal initializes the circuit to a known state.
 
-A sequential circuit can be viewed as a state machine because its current output depends on its stored state and present inputs.
+Without proper initialization, storage elements may begin with unknown or uninitialized values.
 
-### 5.2 Fibonacci Sequence – `06_fib`
+In TL-Verilog, reset conditions can be incorporated directly into signal assignments.
 
-The Fibonacci sequence is a simple example used to understand sequential logic.
+### 6.2 Fibonacci Sequence 
 
-Each number is obtained by adding the previous two numbers.
+The Fibonacci sequence is used to demonstrate sequential data dependencies.
 
-The recurrence relation is:
+Each new Fibonacci number is generated by adding the two preceding numbers.
+
+Mathematically:
 
 ```text
 F(n) = F(n-1) + F(n-2)
 ```
 
-**TL-Verilog implementation:**
+**TL-Verilog implementation**
 
 ```tlv
 $num[31:0] = $reset ? 1 : (>>1$num + >>2$num);
 ```
 
-Understanding the notation:
+**Understanding the implementation**
 
-- `$num[31:0]` – 32-bit pipeline signal.
-- `$reset ? 1 : (...)` – Assigns 1 during reset.
-- `>>1$num` – Value of `$num` from one cycle earlier.
-- `>>2$num` – Value of `$num` from two cycles earlier.
+| Expression | Description |
+|---|---|
+| `$num[31:0]` | 32-bit pipeline signal |
+| `$reset` | Reset condition |
+| `>>1$num` | Value of `$num` from one cycle earlier |
+| `>>2$num` | Value of `$num` from two cycles earlier |
+| `?:` | Conditional selection operator |
 
-The previous two values are added to generate the next Fibonacci number.
+When reset is asserted, the signal is initialized to 1.
 
-This example demonstrates how TL-Verilog allows us to refer to previous-cycle values without explicitly declaring and connecting individual flip-flops.
+Otherwise, the current value is generated by adding the values from the previous two cycles.
 
-### 5.3 Counter Circuit
+The `>>` notation is used in TL-Verilog to reference earlier pipeline values, allowing sequential dependencies to be expressed without manually instantiating each intermediate register.
 
-A simple counter can be implemented using sequential logic.
+![Fibonacci Sequential Circuit](screenshots/06_fib.png)
+
+### 6.3 Counter Circuit
+
+A counter is a basic sequential circuit that increments its stored value on successive clock cycles.
+
+**Implementation**
 
 ```tlv
 $num[31:0] = $reset ? 0 : (>>1$num + 1);
 ```
 
-Explanation:
+**Operation**
 
-- During reset, the counter is initialized to zero.
-- Otherwise, the previous value is incremented by one.
-- The updated value is stored for the next cycle.
+1. When reset is asserted, the counter is initialized to zero.
+2. Otherwise, the previous cycle's value is incremented by one.
+3. The updated value is retained for the next cycle.
 
-The waveform can be used to observe the counter incrementing with successive clock cycles.
+This example demonstrates feedback through sequential state.
 
-**Note:** The simplified Makerchip examples use a two-state simulation model in which X-state behavior may not be represented in the same way as a conventional four-state Verilog simulator.
+### 6.4 Sequential Calculator 
 
-### 5.4 Sequential Calculator – `07_seq_calc`
+The combinational calculator was modified to introduce sequential behavior.
 
-We modified the previous combinational calculator to make it sequential.
-
-The important change is that the first operand is obtained from the previous cycle's output.
+The primary modification is that the first operand is obtained from the previous cycle's output.
 
 ```tlv
 $val1[31:0] = >>1$out;
@@ -392,7 +398,7 @@ $val2[31:0] = $rand2[3:0];
 $op[1:0]    = $rand3[1:0];
 ```
 
-The arithmetic operations remain the same:
+The arithmetic operations remain:
 
 ```tlv
 $sum[31:0]  = $val1 + $val2;
@@ -402,66 +408,75 @@ $qout[31:0] = ($val2 != 0) ?
                ($val1 / $val2) : 32'hDEAD_BEEF;
 ```
 
-The output is also controlled using reset.
+The output selection is additionally controlled using reset.
 
-This modification introduces feedback from the previous output, making the calculator sequential rather than purely combinational.
+This modification introduces feedback from the previous output, making the calculator sequential.
 
-**Screenshot: `07_seq_calc`**
+**Key observation:** The design demonstrates how the result of one clock cycle can become an input to the next cycle.
 
-*Sequential calculator code and waveform.*
+![Sequential Calculator](screenshots/07_seq_calc.png)
 
 ---
 
-## 6. Pipelined Logic
+## 7. Pipelined Logic
 
-### 6.1 Introduction to Pipelining
+### 7.1 Introduction to Pipelining
 
-Pipelining is a technique used to divide a complex operation into multiple smaller stages.
+Pipelining is a technique in which a complex operation is divided into multiple smaller stages.
 
-Instead of performing an entire operation within one clock cycle, the operation is divided into stages, with intermediate results stored between stages.
+Instead of performing all operations within a single clock cycle, intermediate results are captured between stages using pipeline registers.
 
-This reduces the amount of combinational logic that must be completed in a single clock cycle.
+This reduces the amount of combinational logic that must be completed within one clock period.
 
-As a result, pipelining can help achieve a higher operating frequency.
+The primary benefits are:
 
-### 6.2 Pythagoras Example – `08_pipeline_stages`
+- Improved operating frequency potential.
+- Increased transaction throughput.
+- Better utilization of hardware across multiple transactions.
+- Reduced combinational delay per pipeline stage.
 
-We used the Pythagoras theorem as an example to understand pipeline stages.
+### 7.2 Pythagoras Pipeline 
 
-The equation is:
+The Pythagoras theorem is used to demonstrate the implementation of a multi-stage pipeline.
+
+The mathematical expression is:
 
 ```text
 c = sqrt(a² + b²)
 ```
 
-Instead of performing the entire calculation in one cycle, we divide it into three stages:
+The calculation is divided into three stages.
 
-| Stage | Operation |
+| Pipeline stage | Operation |
 |---|---|
 | Stage 1 | Calculate a² and b² |
-| Stage 2 | Add the two squared values |
+| Stage 2 | Add the squared values |
 | Stage 3 | Calculate the square root |
 
-The intermediate results are captured between stages using pipeline registers.
+**Pipeline operation**
 
-The TL-Verilog code describes these operations using stage numbers.
+- Stage 1 computes the squares of both inputs.
+- Stage 2 adds the intermediate results.
+- Stage 3 calculates the final square root.
 
-**RTL view vs Timing Abstract view**
+The intermediate results are transferred between stages using pipeline registers.
 
-- RTL view shows the logic and registers used in the design.
-- Timing Abstract view presents the pipeline stages and their corresponding signals.
+**RTL view and Timing Abstract view**
 
-TL-Verilog automatically handles the pipeline connections between stages.
+The workshop demonstrated two ways of understanding the pipeline:
 
-**Screenshot: `08_pipeline_stages`**
+- **RTL view:** Represents the logic and register structure.
+- **Timing Abstract view:** Represents the pipeline stages and the movement of signals through them.
 
-*Pythagoras pipeline RTL and Timing Abstract diagrams.*
+TL-Verilog automatically handles the required inter-stage connections based on the stage assignments.
 
-### 6.3 Pipeline Retiming – `09_retiming_pipeline`
+![Pipeline Stages](screenshots/08_pipeline_stages.png)
 
-One of the useful features of TL-Verilog is that pipeline retiming becomes much easier.
+### 7.3 Pipeline Retiming
 
-We can change the stage at which an operation is performed by modifying its stage number.
+Pipeline retiming involves changing the placement of operations and registers across pipeline stages to modify the timing distribution of a design.
+
+In TL-Verilog, stage assignments are explicitly represented using `@` notation.
 
 For example:
 
@@ -470,140 +485,152 @@ For example:
    $aa_sq[31:0] = $aa * $aa;
 ```
 
-This describes the square operation in stage 1.
+The square operation is assigned to stage 1.
 
-We can move operations between stages by changing the stage assignments and updating the dependencies.
+Changing stage assignments and adjusting the dependent expressions allows operations to be redistributed across stages.
 
-In traditional Verilog, this may require manually modifying intermediate registers, signal connections and pipeline delays.
+In conventional RTL, similar modifications may require manually changing intermediate registers and signal connections.
 
-TL-Verilog simplifies this process by allowing the designer to express the intended pipeline stages directly.
+TL-Verilog simplifies the process by expressing the intended timing of operations directly.
 
-### 6.4 Achieving Higher Frequency Using Pipelining – `10_high_freq`
+![Pipeline Retiming](screenshots/09_retiming_pipeline.png)
 
-Consider the Pythagoras calculation:
+### 7.4 High-Frequency Design Using Pipelining
+
+Consider the complete Pythagoras calculation:
 
 ```text
 c = sqrt(a² + b²)
 ```
 
-If all the operations are performed within a single clock cycle, the circuit must complete:
+If all operations are performed in a single clock cycle, the circuit must complete:
 
-1. Squaring a.
-2. Squaring b.
-3. Adding the results.
-4. Calculating the square root.
+1. Squaring the first input.
+2. Squaring the second input.
+3. Adding the squared values.
+4. Computing the square root.
 
 The total combinational delay can become large.
 
-The clock period must be long enough for the entire calculation to complete.
+The clock period must be long enough to accommodate the complete critical path.
 
-By dividing the calculation into pipeline stages, the work is distributed:
+**Pipelined implementation**
 
-- Stage 1: Calculate the squares.
-- Stage 2: Add the squared values.
-- Stage 3: Calculate the square root.
+The calculation is divided into separate stages:
 
-Pipeline registers separate the stages.
+| Stage | Operation |
+|---|---|
+| 1 | Calculate the squares |
+| 2 | Add the squared values |
+| 3 | Calculate the square root |
 
-**Why does this improve performance?**
+Pipeline registers separate these stages.
 
-The clock period is now determined primarily by the delay of the slowest pipeline stage rather than the combined delay of the entire calculation.
+**Why does pipelining improve performance?**
 
-Once the pipeline is filled, different input transactions can occupy different stages simultaneously.
+The clock period is now determined by the delay of the slowest pipeline stage rather than the combined delay of all operations.
 
-For example:
+Once the pipeline is filled, different transactions can be processed simultaneously in different stages.
+
+Example:
 
 | Clock cycle | Stage 1 | Stage 2 | Stage 3 |
 |---|---|---|---|
-| 1 | Transaction A | – | – |
-| 2 | Transaction B | Transaction A | – |
-| 3 | Transaction C | Transaction B | Transaction A |
-| 4 | Transaction D | Transaction C | Transaction B |
+| 1 | A | – | – |
+| 2 | B | A | – |
+| 3 | C | B | A |
+| 4 | D | C | B |
 
-This is the main advantage of pipelining.
+Here, transaction A progresses through the pipeline while subsequent transactions enter the earlier stages.
 
-The hardware is not sitting idle while a previous transaction completes. Different stages work on different transactions simultaneously.
+This overlapping execution increases throughput.
 
-**Important:** Pipelining improves throughput and can increase the achievable clock frequency, but it also introduces additional registers, latency and hardware overhead.
+**Important design considerations**
 
-**Screenshot: `10_high_freq`**
+- Pipelining can increase the maximum operating frequency.
+- Throughput improves after the pipeline is filled.
+- Latency may increase because the result passes through multiple stages.
+- Additional pipeline registers introduce area and clock-power overhead.
+- The slowest stage determines the achievable clock period.
 
-*Pythagoras pipeline demonstrating concurrent execution across stages.*
+Pipelining does not eliminate the computation time; it distributes the computation across clock cycles and enables overlapping execution.
+
+![High Frequency Pipelining](screenshots/10_high_freq.png)
 
 ---
 
-## 7. Identifiers and Signal Types in TL-Verilog
+## 8. Pipeline Signals and Identifiers
 
-In TL-Verilog, the type and meaning of an identifier are determined by its symbol prefix and naming convention.
+TL-Verilog uses specific symbols and naming conventions to represent pipeline signals, scopes, and stage relationships.
 
-| Identifier | Meaning |
+| Notation | Description |
 |---|---|
 | `$signal` | Pipeline signal |
-| `\|scope` | Pipeline scope |
-| `/scope` | Hierarchical scope |
+| `\|name` | Pipeline scope |
+| `/name` | Hierarchical scope |
 | `@n` | Pipeline stage |
 | `?$valid` | Validity-based conditional scope |
-| `*reset` | Signal originating from the SystemVerilog interface |
-| `>>1$signal` | Previous-cycle value |
+| `*reset` | SystemVerilog interface signal |
+| `>>1$signal` | Signal value from one cycle earlier |
+| `>>2$signal` | Signal value from two cycles earlier |
 
-TL-Verilog uses naming and syntax conventions to distinguish between different signal types and scopes.
+The distinction between these notations is important when understanding signal flow, pipeline timing, and hierarchy.
 
-**Important naming rule:** Token names should not end with a numeric character because numeric suffixes are used in certain TL-Verilog naming and stage conventions.
+### Pipeline Practice
 
----
+A pipeline diagram was reproduced using the Makerchip environment.
 
-## 8. Pipeline Practice – `11_pipeline`
+The exercise involved identifying the pipeline structure and observing how signals are represented across different stages.
 
-In this exercise, we attempted to reproduce the pipeline diagram shown during the workshop.
+The reproduced diagram showed four unassigned values and six pipeline stages, matching the structure demonstrated during the workshop.
 
-The objective was to understand how signals move through different stages.
+This exercise helped reinforce the relationship between pipeline stage declarations and the automatically generated NAV-TLV diagram.
 
-The reproduced diagram showed:
-
-- Four unassigned values.
-- Six pipeline stages.
-- The expected pipeline structure.
-
-This exercise helped us understand how pipeline signals are represented in the NAV-TLV diagram.
-
-**Screenshot: `11_pipeline`**
-
-*Reproduced pipeline diagram in Makerchip.*
+![Pipeline Diagram](screenshots/11_pipeline.png)
 
 ---
 
-## 9. Combining Counter and Calculator with Pipelining – `12_counter_and_calc_pipeline`
+## 9. Integrating Counter and Calculator Pipeline
 
-We extended the earlier calculator example by introducing pipeline stages and counter logic.
+The earlier counter and calculator examples were extended into a combined pipeline exercise.
 
-This exercise combines multiple concepts:
+This implementation brings together:
 
-- Sequential logic
+- Sequential state
 - Arithmetic operations
 - Pipeline stages
-- Counter implementation
+- Counter logic
+- Signal dependencies
 - Waveform analysis
 
-The waveform and diagram help us observe how values move through the pipeline and how different operations are synchronized.
+The objective was to understand how multiple logic operations can be organized within a pipelined design.
 
-**Screenshot: `12_counter_and_calc_pipeline`**
+The Makerchip waveform and diagram provide visibility into the movement of values across clock cycles.
 
-*Pipelined calculator and counter implementation.*
+![Counter and Calculator Pipeline](screenshots/12_counter_and_calc_pipeline.png)
 
 ---
 
-## 10. Two-Cycle Calculator – `13_2_cycle_calc`
+## 10. Two-Cycle Calculator
 
-For some high-frequency designs, we may choose to divide calculator operations across two cycles.
+For high-frequency designs, it may be beneficial to distribute the calculator operations across multiple stages.
 
-In this example:
+In this exercise, the calculator is divided into two stages.
 
-- Stage 1 performs the arithmetic operations.
-- Stage 2 selects the required result based on the opcode.
+**Stage 1**
 
-The first operand is taken from the output of two cycles earlier.
+- Obtain the operands.
+- Perform addition.
+- Perform subtraction.
+- Perform multiplication.
+- Perform division.
 
-**TL-Verilog implementation:**
+**Stage 2**
+
+- Select the required arithmetic result based on the opcode.
+- Generate the final output.
+
+**TL-Verilog implementation**
 
 ```tlv
 |calc
@@ -631,245 +658,248 @@ The first operand is taken from the output of two cycles earlier.
       $out = (!$valid || $reset) ? 32'b0 : $cal;
 ```
 
-The first stage performs the arithmetic calculations.
+The arithmetic operations are described in stage 1, while the result selection and output generation are described in stage 2.
 
-The second stage selects the result and assigns it to the output.
+The `$valid` signal is introduced to track whether the pipeline contains a meaningful transaction.
 
-The validity signal helps determine whether the output represents meaningful data.
+The example also demonstrates the use of `>>2$out` to reference an earlier output value.
 
-**Screenshot: `13_2_cycle_calc`**
-
-*Two-cycle calculator implementation and waveform.*
+![Two Cycle Calculator](screenshots/13_2_cycle_calc.png)
 
 ---
 
 ## 11. Validity in TL-Verilog
 
-Validity is an important concept in transaction-level design.
+Validity is an important concept in transaction-level hardware design.
 
-It indicates whether a transaction or pipeline value contains meaningful data.
+It indicates whether a particular pipeline transaction contains meaningful data.
 
-Traditional RTL languages do not provide TL-Verilog's built-in validity-based pipeline construct in the same way.
+Unlike conventional RTL, TL-Verilog provides a dedicated validity-based conditional scope.
 
-In TL-Verilog, validity can be expressed using a conditional scope:
+**Syntax**
 
 ```tlv
 ?$valid
    @1
-      // Logic executed for valid transactions
+      // Logic for valid transactions
 ```
 
-When the validity signal is asserted, the logic inside the scope is considered meaningful.
+When `$valid` is asserted, the logic inside the scope is considered active for a valid transaction.
 
-When validity is not asserted, the associated data can be treated as don't-care values.
+When validity is deasserted, the associated pipeline data can be treated as don't-care values, subject to the design's validity and dependency rules.
 
-### Advantages of Validity
+### 11.1 Advantages of Validity
 
-- Makes pipeline control easier.
-- Helps identify meaningful and meaningless transactions.
-- Simplifies debugging.
-- Helps improve design clarity.
-- Allows tools to optimize logic when data is not meaningful.
+- Identifies meaningful transactions.
+- Simplifies pipeline control.
+- Improves design readability.
+- Helps avoid treating invalid data as meaningful results.
+- Supports optimization by identifying unnecessary computations.
 
-### Validity and Clock Gating
+### 11.2 Validity and Clock Gating
 
-Clock gating is a power-saving technique used in digital circuits.
+Clock gating is a low-power design technique used to reduce unnecessary clock switching activity.
 
-A significant portion of dynamic power consumption in synchronous digital designs comes from switching activity, including clock distribution.
+The clock signal is distributed throughout a synchronous design to drive flip-flops and other sequential elements.
 
-The clock signal is distributed to many flip-flops and toggles continuously.
+Clock transitions contribute to dynamic power consumption because of the switching activity associated with the clock network.
 
-When a register does not need to update, unnecessary clock transitions can be avoided using clock gating.
+If a register does not need to update, unnecessary clock transitions can be avoided through appropriate clock-gating logic.
 
-The basic idea is:
+**Relationship with validity**
 
-- Identify when a pipeline value is meaningful.
-- Identify when a register needs to capture new data.
-- Prevent unnecessary clock switching when updates are not required.
+Validity information can help identify when pipeline data needs to be processed or captured.
 
-TL-Verilog's validity methodology can help express the conditions needed for fine-grained clock gating and power optimization.
+This information can be used as part of the control conditions for clock gating and other power optimizations.
 
-However, validity and clock gating are not the same thing. Validity describes meaningful transactions, while actual clock gating requires suitable implementation and synthesis support.
+**Important distinction:**
+
+- Validity identifies whether a transaction contains meaningful data.
+- Clock gating controls whether the clock is delivered to a sequential element or group of elements.
+
+Validity does not automatically imply that the clock is gated. Actual clock gating requires suitable clock-control structures and implementation support.
+
+TL-Verilog's validity methodology makes it easier to express conditions that can support fine-grained power optimization.
 
 ---
 
-## 12. Pythagoras Example with Validity – `14_pyth_valid`
+## 12. Pythagoras Pipeline with Validity 
 
-We extended the Pythagoras pipeline by introducing a validity condition.
+The Pythagoras pipeline was extended by introducing a validity condition.
 
-### Understanding the Code Structure
+This exercise combines pipeline stages, reset handling, validity, and accumulation of results.
 
-The following code demonstrates the overall structure:
+### 12.1 SystemVerilog and TL-Verilog Sections
+
+The source file contains multiple sections.
+
+**TL-Verilog version declaration**
 
 ```tlv
 \m5_TLV_version 1d: tl-x.org
+```
 
+Specifies the TL-Verilog version information used by the Makerchip environment.
+
+**SystemVerilog section**
+
+```verilog
 \SV
    `include "sqrt32.v";
    m4_include_lib(https://raw.githubusercontent.com/stevehoover/makerchip_examples/refs/heads/master/pythagoras_viz.tlv)
 
    m5_makerchip_module
+```
 
+The `\SV` section allows conventional SystemVerilog declarations, module infrastructure, and external includes to be used alongside TL-Verilog.
+
+- `sqrt32.v` provides the square-root implementation.
+- `m4_include_lib` includes the external Pythagoras visualization and logging library.
+- `m5_makerchip_module` provides the Makerchip module infrastructure.
+
+**TL-Verilog section**
+
+```tlv
 \TLV
-
-   // Stimulus
-   |calc
-      @1
-         $reset = *reset;
-
-   // DUT (Design Under Test)
-   |calc
-      ?$valid
-         // Pythagoras's Theorem
-         @1
-            $aa_sq[7:0] = $aa[3:0] ** 2;
-            $bb_sq[7:0] = $bb[3:0] ** 2;
-
-         @2
-            $cc_sq[8:0] = $aa_sq + $bb_sq;
-
-         @3
-            $cc[4:0] = sqrt($cc_sq);
-
-      @4
-         $tot_dist[63:0] = $reset ? '0 :
-                           $valid ? >>1$tot_dist + $cc :
-                                    $RETAIN;
-
-         // VIZ and LOG output
-         m5+pythagorean_viz_and_log(1)
-
-\SV
-   endmodule
 ```
 
-### Understanding the Important Statements
+Contains the actual TL-Verilog design and pipeline logic.
 
-**1. SystemVerilog section – `\SV`**
-
-The `\SV` section allows us to include conventional SystemVerilog code and external modules.
-
-For example:
-
-```verilog
-`include "sqrt32.v";
-```
-
-This includes the square-root implementation.
-
-**2. Makerchip module**
-
-```tlv
-m5_makerchip_module
-```
-
-This macro provides the Makerchip module infrastructure.
-
-**3. TL-Verilog section – `\TLV`**
-
-The `\TLV` section contains the actual TL-Verilog design.
-
-**4. Pipeline scope**
-
-```tlv
-|calc
-```
-
-Defines the calculation pipeline.
-
-**5. Reset signal**
+### 12.2 Reset Signal Mapping
 
 ```tlv
 $reset = *reset;
 ```
 
-Here, `$reset` is a TL-Verilog pipeline signal, while `*reset` refers to the reset signal provided through the SystemVerilog interface.
+Here:
 
-**6. Validity scope**
+- `$reset` is a TL-Verilog pipeline signal.
+- `*reset` refers to the reset signal provided through the SystemVerilog interface.
 
-```tlv
-?$valid
-```
+The assignment connects the external reset input to the TL-Verilog design.
 
-The logic inside this conditional scope is active for valid transactions.
-
-**7. Pipeline stages**
-
-- `@1`: Calculate the squares.
-- `@2`: Add the squared values.
-- `@3`: Calculate the square root.
-- `@4`: Accumulate the total distance.
-
-**8. Retaining previous state**
+### 12.3 Pythagoras Pipeline Implementation
 
 ```tlv
-$RETAIN
+|calc
+   ?$valid
+      @1
+         $aa_sq[7:0] = $aa[3:0] ** 2;
+         $bb_sq[7:0] = $bb[3:0] ** 2;
+
+      @2
+         $cc_sq[8:0] = $aa_sq + $bb_sq;
+
+      @3
+         $cc[4:0] = sqrt($cc_sq);
 ```
 
-Retains the previous value of the state signal when the corresponding update condition is not satisfied.
+The calculation is divided into three pipeline stages.
 
-**Screenshot: `14_pyth_valid`**
+| Stage | Operation |
+|---|---|
+| `@1` | Calculate the squares of the two inputs |
+| `@2` | Add the squared values |
+| `@3` | Calculate the square root |
 
-*Pythagoras pipeline with validity and waveform visualization.*
+The validity scope ensures that the calculation is associated with valid transactions.
+
+### 12.4 Accumulating the Result
+
+```tlv
+@4
+   $tot_dist[63:0] = $reset ? '0 :
+                     $valid ? >>1$tot_dist + $cc :
+                              $RETAIN;
+```
+
+The final stage maintains an accumulated distance.
+
+- During reset, the accumulator is initialized to zero.
+- For a valid transaction, the previous accumulated value is added to the new distance.
+- Otherwise, `$RETAIN` preserves the previous state.
+
+This demonstrates the combination of pipelined computation and sequential state retention.
+
+### 12.5 Visualization and Logging
+
+```tlv
+m5+pythagorean_viz_and_log(1)
+```
+
+This macro invokes the Pythagoras visualization and logging functionality included through the external library.
+
+It allows the calculation to be observed through the Makerchip visualization and log facilities.
+
+![Pythagoras with Validity](screenshots/14_pyth_valid.png)
 
 ---
 
-## 13. Two-Cycle Calculator with Validity – `15_2_cyc_calc_validity`
+## 13. Two-Cycle Calculator with Validity 
 
-We further modified the two-cycle calculator by incorporating validity.
+The two-cycle calculator was further extended using validity-based pipeline control.
 
-The validity signal ensures that the output is considered meaningful only when the required transaction has progressed through the pipeline.
+The objective is to ensure that the output is treated as meaningful only when the corresponding transaction has progressed through the pipeline.
 
-This helps prevent invalid or incomplete data from being treated as a valid result.
+This exercise demonstrates the combination of:
 
-The exercise demonstrates how pipeline stages, arithmetic operations and validity conditions can work together.
+- Two-stage calculator architecture.
+- Arithmetic result generation.
+- Opcode-based result selection.
+- Validity propagation.
+- Reset handling.
+- Pipeline output control.
 
-**Screenshot: `15_2_cyc_calc_validity`**
+The validity signal provides a way to distinguish valid transactions from inactive pipeline cycles.
 
-*Two-cycle calculator with validity logic and waveform.*
+![Two Cycle Calculator with Validity](screenshots/15_2_cyc_cal_validity.png)
 
 ---
 
-## 14. Visualization in Makerchip – VIZ Tab
+## 14. Makerchip Visualization – VIZ Tab
 
-Makerchip provides a VIZ tab for animated visualization of a design.
+Makerchip provides multiple views for understanding a hardware design.
 
-The NAV-TLV diagram is generated automatically from the TL-Verilog pipeline structure.
+The NAV-TLV diagram is generated automatically based on the pipeline scopes, stage assignments, and signal dependencies.
 
-However, the VIZ tab requires a visualization block in the source code.
+The VIZ tab provides a separate graphical visualization of the design.
 
-### What is `\viz_js`?
+Unlike the NAV-TLV diagram, the VIZ tab requires visualization code to be included in the source.
+
+### 14.1 The `\viz_js` Block
 
 `\viz_js` is a JavaScript-based visualization block that uses the Fabric.js drawing library.
 
-It allows us to create graphical representations of signals and update them during simulation.
+It allows the designer to create graphical representations of the hardware simulation.
 
-### Main Components
+The visualization can display signal values, text, graphical objects, and other information that updates during simulation.
+
+### 14.2 Components of a Visualization Block
 
 | Component | Purpose |
 |---|---|
-| `box` | Defines the visualization area |
+| `box` | Defines the visualization area and appearance |
 | `init()` | Initializes graphical objects |
-| `render()` | Updates the visualization during simulation |
-| `where` | Defines the positioning of the visualization |
+| `render()` | Updates graphical objects during simulation |
+| `where` | Defines the position of the visualization relative to its parent |
 
-### Reading Signal Values
+### 14.3 Accessing Signal Values
 
-Makerchip provides methods to access simulation values:
+The visualization block provides methods to read simulation signals.
 
 ```javascript
-'$out'.asInt()       // Read as integer
-'$valid'.asBool()    // Read as Boolean
-'$out'.asHexStr()    // Read as hexadecimal string
+'$out'.asInt()       // Read signal as an integer
+'$valid'.asBool()    // Read signal as a Boolean
+'$out'.asHexStr()    // Read signal as hexadecimal
 ```
 
-Signals from previous stages can be accessed using stage references, such as:
+Signals from previous stages can also be accessed using stage references.
 
 ```javascript
 '>>1$out'
 ```
 
-### Example: Calculator Visualization
+### 14.4 Calculator Visualization Example
 
 ```tlv
 @2
@@ -896,45 +926,46 @@ Signals from previous stages can be accessed using stage references, such as:
       },
 ```
 
-### Steps to Enable Visualization
+### 14.5 Steps to Enable Visualization
 
-1. Complete the design and compile it successfully.
-2. Add the `\viz_js` block at the appropriate location.
-3. Compile the design again.
-4. Open the VIZ tab.
-5. Step through the simulation to observe the changing values.
+1. Complete the TL-Verilog implementation.
+2. Compile the design and verify that the log does not contain errors.
+3. Add the `\viz_js` block at the appropriate scope and indentation.
+4. Compile the design again.
+5. Open the VIZ tab.
+6. Step through the simulation and observe the changing signal values.
 
-**Common issue:** If Makerchip displays "This model has no visualization", check whether a valid `\viz_js` block is present in the design.
+**Common issue:** If the VIZ tab displays "This model has no visualization", check whether the design contains a valid `\viz_js` block.
 
 ---
 
-## 15. Hierarchy in TL-Verilog – `16_hier`
+## 15. Hierarchical Design in TL-Verilog 
 
-Hierarchy organizes a design into smaller, logically related sections.
+Hierarchy is used to organize a complex hardware design into smaller, logically related sections.
 
-It helps us construct complex designs by grouping related signals and replicating hardware structures.
+It allows repeated hardware structures to be represented efficiently without duplicating the same implementation.
 
-In TL-Verilog, indentation and scope notation define the design hierarchy.
+In TL-Verilog, hierarchical scopes are represented using the `/` prefix, while pipeline scopes and timing stages are represented using `|` and `@` respectively.
 
 ### 15.1 Scope Types
 
-| Symbol | Meaning | Purpose |
+| Notation | Description | Purpose |
 |---|---|---|
 | `\|name` | Pipeline scope | Defines a pipeline |
 | `/name` | Hierarchical scope | Groups and organizes hardware |
-| `@n` | Pipeline stage | Defines when an operation occurs |
+| `@n` | Pipeline stage | Specifies the timing stage |
 
-### 15.2 Example: Calculating Distance from the Origin
+### 15.2 Example – Distance Calculation
 
-Consider the Pythagoras theorem:
+Consider the calculation of the distance from the origin using the Pythagoras theorem:
 
 ```text
 Distance = sqrt(x² + y²)
 ```
 
-Instead of writing separate logic for each coordinate, we can use a replicated hierarchical scope.
+Instead of writing separate logic for each coordinate, hierarchical replication allows the same logic to be instantiated for multiple coordinates.
 
-**TL-Verilog code:**
+**TL-Verilog implementation**
 
 ```tlv
 \TLV
@@ -956,18 +987,18 @@ Instead of writing separate logic for each coordinate, we can use a replicated h
 /coord[1:0]
 ```
 
-Creates two instances:
+This creates two instances:
 
-- `/coord[0]`
-- `/coord[1]`
+```text
+/coord[0]
+/coord[1]
+```
 
-Each instance has its own `$value` and `$sq` signals.
+Each instance contains its own `$value` and `$sq` signals and performs the same squaring operation independently.
 
-Both instances perform the same squaring operation independently.
+This is conceptually similar to an array of module instances or a Verilog generate construct.
 
-This is conceptually similar to a Verilog generate loop or an array of module instances.
-
-We can scale the design by changing the range.
+The number of replicated instances can be changed by modifying the range.
 
 For example:
 
@@ -975,79 +1006,84 @@ For example:
 /coord[7:0]
 ```
 
-Creates eight replicated instances.
+creates eight coordinate instances.
 
-### 15.4 Referencing Signals
+### 15.4 Accessing Signals Across Hierarchical Scopes
 
-Inside a hierarchical scope, signals can be accessed directly.
+Within a hierarchical scope, signals can be referenced directly.
 
 ```tlv
 $sq
 ```
 
-To access a signal from another scope, we use its hierarchical path.
+To access a signal from another scope, the hierarchical path is used.
 
 ```tlv
 /coord[0]$sq
 /coord[1]$sq
 ```
 
-### 15.5 Hierarchy and Timing
+This allows signals from different replicated instances to be accessed and combined.
 
-Hierarchy and pipeline timing are two independent concepts.
+### 15.5 Hierarchy and Pipeline Timing
 
-- Hierarchy describes how hardware is organized.
-- Pipeline stages describe when operations are performed.
+Hierarchy and pipeline stages describe two different aspects of a hardware design.
+
+- **Hierarchy:** Defines how hardware is grouped and organized.
+- **Pipeline stages:** Define when operations take place.
 
 In the example:
 
 | Stage | Operation |
 |---|---|
 | `@1` | Each coordinate calculates its square |
-| `@2` | The two squared values are added |
+| `@2` | The squared values are added |
 | `@3` | Square root is calculated |
 
-The pipeline stages are automatically connected through the required intermediate registers.
+The required pipeline connections are inferred from the stage assignments and signal dependencies.
 
-### 15.6 Why Hierarchy is Useful
+### 15.6 Benefits of Hierarchical Design
 
 - Reduces repetitive code.
-- Makes hardware easier to organize.
-- Supports replication of similar logic.
-- Improves scalability.
-- Makes complex processor designs easier to manage.
+- Supports scalable hardware replication.
+- Organizes related signals into logical groups.
+- Simplifies complex design structures.
+- Improves code readability and maintainability.
 
-**Screenshot: `16_hier`**
+These concepts become especially useful when designing larger processor architectures containing repeated execution units, register structures, and functional blocks.
 
-*Hierarchical design showing replicated coordinate scopes and pipeline stages.*
+![Hierarchical Design](screenshots/16_hier.png)
 
 ---
 
-## 16. Key Learnings from Day 3
+## 16. Key Takeaways
 
-Day 3 provided a practical introduction to digital logic design and the use of TL-Verilog.
+The Day 3 workshop covered the transition from fundamental digital logic to more structured hardware design using TL-Verilog.
 
-The major concepts covered were:
+The major concepts explored were:
 
-1. Understanding fundamental logic gates and their truth tables.
-2. Implementing combinational circuits such as full adders and multiplexers.
-3. Performing arithmetic operations using TL-Verilog.
-4. Understanding sequential logic, flip-flops, clock and reset.
-5. Implementing Fibonacci and counter circuits.
-6. Converting a combinational calculator into a sequential calculator.
-7. Understanding pipeline stages and how pipelining improves throughput.
-8. Exploring pipeline retiming using TL-Verilog.
-9. Understanding validity and its role in pipeline control.
-10. Exploring the relationship between validity and clock gating.
-11. Using Makerchip's waveform, NAV-TLV and VIZ features.
-12. Understanding hierarchical scopes and hardware replication.
+| Area | Concepts learned |
+|---|---|
+| Digital Logic | Logic gates, truth tables, Boolean operators |
+| Combinational Logic | Full adders, multiplexers, vector operations |
+| Arithmetic Design | Addition, subtraction, multiplication, division |
+| Sequential Logic | Clock, flip-flops, reset, feedback |
+| Sequential Examples | Fibonacci sequence and counters |
+| Pipelining | Pipeline stages, registers, retiming |
+| Performance | Throughput, latency and clock frequency |
+| Pipeline Control | Validity and transaction management |
+| Power Optimization | Clock gating concepts |
+| Visualization | Waveforms, NAV-TLV and VIZ |
+| Hierarchical Design | Scope creation and hardware replication |
 
-### Conclusion
+## 17. Conclusion
 
-The Day 3 workshop demonstrated how digital logic can be developed progressively, starting from individual logic gates and moving towards more complex pipelined and hierarchical structures.
+Day 3 provided practical exposure to the methodology of digital hardware design using TL-Verilog and Makerchip.
 
-The most important takeaway was understanding how TL-Verilog simplifies the description of sequential and pipelined hardware.
+Starting from fundamental logic gates, the workshop progressively introduced combinational circuits, sequential behavior, pipelined computation, validity-based control, and hierarchical hardware organization.
 
-These concepts form the foundation for designing a processor core, where arithmetic units, control logic, registers and pipeline stages work together to execute instructions.
+An important takeaway was understanding how TL-Verilog simplifies pipeline description by allowing operations to be assigned directly to stages, reducing the need for manually connecting intermediate registers.
 
-**Next:** Continue towards building the RISC-V processor by applying these digital logic, pipeline and hierarchy concepts.
+The concepts covered in this session establish the foundation for understanding datapath construction, control logic, and pipeline organization in a RISC-V processor.
+
+---
