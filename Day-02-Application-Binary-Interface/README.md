@@ -894,7 +894,7 @@ In terms of sign bits:
 - but the result has a different sign,
 - signed overflow has occurred.
 
-![Signed addition overflow](screenshots/08_overflow_conditions.png)
+![Signed addition overflow](screenshots/08_overflow_condtions.png)
 
 ### 11.4 Overflow Detection Example
 
@@ -994,16 +994,17 @@ Consider multiplying two 4-bit binary numbers. The product can require up to 8 b
 ### Multiplication Flowchart
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 20, 'rankSpacing': 25}, 'themeVariables': {'fontSize': '12px'}}}%%
 flowchart TD
     A([Start]) --> B[Initialize product = 0]
-    B --> C[Initialize counter = 4]
+    B --> C[Initialize counter = bit_size]
     C --> D{Multiplier LSB = 1?}
-    D -- Yes --> E[Product = Product + Multiplicand]
+    D -- Yes --> E[Add multiplicand to product]
     D -- No --> F[Skip addition]
     E --> G[Shift multiplicand left]
     F --> G
     G --> H[Shift multiplier right]
-    H --> I[Counter = Counter - 1]
+    H --> I[Decrement counter]
     I --> J{Counter = 0?}
     J -- No --> D
     J -- Yes --> K[/Output product/]
