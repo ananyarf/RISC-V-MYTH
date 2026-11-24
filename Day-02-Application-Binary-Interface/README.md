@@ -994,7 +994,7 @@ Consider multiplying two 4-bit binary numbers. The product can require up to 8 b
 ### Multiplication Flowchart
 
 ```mermaid
-%%{init: {'flowchart': {'nodeSpacing': 20, 'rankSpacing': 25}, 'themeVariables': {'fontSize': '12px'}}}%%
+%%{init: {'flowchart': {'nodeSpacing': 15, 'rankSpacing': 20}, 'themeVariables': {'fontSize': '10px'}}}%%
 flowchart TD
     A([Start]) --> B[Initialize product = 0]
     B --> C[Initialize counter = bit_size]
@@ -1073,6 +1073,7 @@ If the subtraction result is non-negative:
 ### Division Flowchart
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 15, 'rankSpacing': 20}, 'themeVariables': {'fontSize': '10px'}}}%%
 flowchart TD
     A([Start]) --> B[Initialize remainder, divisor, quotient and counter]
     B --> C[Subtract divisor from remainder]
@@ -1246,6 +1247,7 @@ Assume:
 ### 16.2 Floating-Point Addition Flowchart
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 15, 'rankSpacing': 20}, 'themeVariables': {'fontSize': '10px'}}}%%
 flowchart TD
     A([Start]) --> B[/Input two floating-point numbers/]
     B --> C[Extract sign, exponent and significand]
@@ -1327,6 +1329,7 @@ E=E_1+E_2-Bias
 ### 17.2 Floating-Point Multiplication Flowchart
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 15, 'rankSpacing': 20}, 'themeVariables': {'fontSize': '10px'}}}%%
 flowchart TD
     A([Start]) --> B[/Input two floating-point numbers/]
     B --> C[Extract signs, exponents and significands]
