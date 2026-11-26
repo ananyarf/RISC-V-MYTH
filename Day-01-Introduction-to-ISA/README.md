@@ -138,13 +138,13 @@ The disassembly displays the machine instructions along with their corresponding
 Run the program using the Spike RISC-V ISA simulator:
 
 ```bash
-spike pk sum1ton_O1.o
+spike pk sum1ton_O1.elf
 ```
 
 To execute in debug mode:
 
 ```bash
-spike -d pk sum1ton_O1.o
+spike -d pk sum1ton_O1.elf
 ```
 
 ### Step 5: Debug and observe register values
@@ -196,22 +196,19 @@ A 64-bit doubleword consists of 8 bytes.
 Unsigned integers represent only non-negative values.
 
 For an n-bit unsigned number, the range is:
+2^n-1
 
-\[
-0 \text{ to } 2^n-1
-\]
 
 For a 64-bit unsigned integer:
 
-\[
-0 \text{ to } 2^{64}-1
-\]
+2^{64}-1
+
 
 Example: For a 3-bit unsigned number:
 
-\[
+
 2^3=8
-\]
+
 
 Possible values: 0 to 7.
 
@@ -226,15 +223,15 @@ Signed integers represent both positive and negative numbers using 2's complemen
 
 For an n-bit signed integer, the range is:
 
-\[
--2^{n-1} \text{ to } 2^{n-1}-1
-\]
+
+-2^{n-1} to 2^{n-1}-1
+
 
 For a 64-bit signed integer:
 
-\[
--2^{63} \text{ to } 2^{63}-1
-\]
+
+-2^{63} to 2^{63}-1
+
 
 Positive numbers are represented normally in binary.
 
