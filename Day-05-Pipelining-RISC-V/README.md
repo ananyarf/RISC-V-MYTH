@@ -15,9 +15,6 @@ https://myth.makerchip.com/v228/ide/~0lYf5c16/p-0PmcK1
 2. [Part 2: Pipelining](#part-2-pipelining)
 3. [Bugs found and fixed](#bugs-found-and-fixed)
 4. [Final code](#final-code)
-5. [Screenshot checklist](#screenshot-checklist)
-6. [Suggested repo layout and commits](#suggested-repo-layout-and-commits)
-
 ---
 
 ## 0. Setup and test program
